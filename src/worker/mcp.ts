@@ -1,13 +1,12 @@
 /**
- * MCP Server with Stripe integration
+ * MCP Server
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { McpAgent, experimental_PaidMcpAgent as PaidMcpAgent } from "agents/mcp";
+import { McpAgent } from "agents/mcp";
 import type { Env } from "./env.js";
-import { routesManifest } from "../plugins/routesManifest.generated.js";
+import { routesManifest } from "./routesManifest.generated.js";
 import { registerFreeTools } from "../tools/index.js";
-import { registerPaidTools } from "../tools/index.js";
 
 const DEFAULT_RESOURCE_META = {
   "openai/widgetCSP": {
@@ -71,48 +70,5 @@ export class BoilerplateMCP extends McpAgent<Env> {
 
     // Register free tools
     registerFreeTools(this.server, this.env, routesManifest);
-  }
-}
-
-/**
- * Paid MCP server with Stripe integration
- */
-export class BoilerplatePaidMCP extends PaidMcpAgent<Env, unknown, unknown> {
-  server = new McpServer({
-    name: "BoilerplatePaidMCP",
-    version: "1.0.0",
-  });
-
-  async init() {
-    // Register paid tools with Stripe agent
-    registerPaidTools(this, this.env);
-
-    // Register UI resources from manifest
-    for (const [, routeInfo] of Object.entries(routesManifest)) {
-      const resourceUri = `ui://widget/${routeInfo.resourceURI}`;
-
-      this.server.registerResource(
-        routeInfo.resourceName,
-        `ui://widget/${routeInfo.resourceURI}`,
-        {},
-        async () => {
-          const response = await this.env.ASSETS.fetch(
-            new Request(`http://localhost${routeInfo.originalUrlPath}`)
-          );
-          const html = await response.text();
-
-          return {
-            contents: [
-              {
-                uri: resourceUri,
-                mimeType: "text/html+skybridge",
-                text: html,
-                _meta: DEFAULT_RESOURCE_META,
-              },
-            ],
-          };
-        }
-      );
-    }
   }
 }

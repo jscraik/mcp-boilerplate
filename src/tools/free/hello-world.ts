@@ -6,7 +6,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Env } from "../../worker/env.js";
-import type { routesManifest } from "../../plugins/routesManifest.generated";
+import type { routesManifest } from "../../worker/routesManifest.generated";
 
 export function registerHelloWorldTool(
   server: McpServer,

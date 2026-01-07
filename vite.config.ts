@@ -8,14 +8,12 @@ import { routesManifest } from "./src/plugins/routesManifest";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
-  if (!env.WORKER_DOMAIN_BASE) {
-    throw new Error(
-      "WORKER_DOMAIN_BASE was not provided during the build. Please set WORKER_DOMAIN_BASE in your .env or if you are using Cloudflare Builds, get the deployed worker domain and put it into WORKER_DOMAIN_BASE."
-    );
-  }
+  // BASE_URL is optional for local development
+  // In production, set BASE_URL in your .env or Cloudflare build settings
+  const baseUrl = env.BASE_URL || "/";
 
   return {
-    base: env.WORKER_DOMAIN_BASE,
+    base: baseUrl,
     plugins: [react(), tailwindcss(), cloudflare(), routesManifest()],
   };
 });
