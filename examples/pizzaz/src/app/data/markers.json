@@ -1,0 +1,104 @@
+{
+  "places": [
+    {
+      "id": "nova-slice-lab",
+      "name": "Nova Slice Lab",
+      "coords": [-122.4098, 37.8001],
+      "description": "Award‑winning Neapolitan pies in North Beach.",
+      "city": "North Beach",
+      "rating": 4.8,
+      "price": "$$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-1.png"
+    },
+    {
+      "id": "midnight-marinara",
+      "name": "Midnight Marinara",
+      "coords": [-122.4093, 37.799],
+      "description": "Focaccia‑style squares, late‑night favorite.",
+      "city": "North Beach",
+      "rating": 4.6,
+      "price": "$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-2.png"
+    },
+    {
+      "id": "crusty-corner",
+      "name": "Crusty Corner",
+      "coords": [-122.4181, 37.7901],
+      "description": "Classic New York style by the slice.",
+      "city": "Mission District",
+      "rating": 4.5,
+      "price": "$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-3.png"
+    },
+    {
+      "id": "the-sourdough-spot",
+      "name": "The Sourdough Spot",
+      "coords": [-122.419, 37.7899],
+      "description": "San Francisco sourdough crust creations.",
+      "city": "Mission District",
+      "rating": 4.7,
+      "price": "$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-4.png"
+    },
+    {
+      "id": "firebrick-pizzeria",
+      "name": "Firebrick Pizzeria",
+      "coords": [-122.4065, 37.7823],
+      "description": "Wood‑fired classics with seasonal toppings.",
+      "city": "SoMa",
+      "rating": 4.9,
+      "price": "$$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-5.png"
+    },
+    {
+      "id": "golden-oven",
+      "name": "Golden Oven",
+      "coords": [-122.4073, 37.7834],
+      "description": "Artisan pizzas using local organic ingredients.",
+      "city": "SoMa",
+      "rating": 4.4,
+      "price": "$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-6.png"
+    },
+    {
+      "id": "bay-breeze-bake",
+      "name": "Bay Breeze Bake",
+      "coords": [-122.395, 37.7946],
+      "description": "Coastal vibes and clam‑topped pies.",
+      "city": "Embarcadero",
+      "rating": 4.6,
+      "price": "$$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-1.png"
+    },
+    {
+      "id": "cable-car-crust",
+      "name": "Cable Car Crust",
+      "coords": [-122.412, 37.7914],
+      "description": "Tourist favorite near Union Square.",
+      "city": "Financial District",
+      "rating": 4.3,
+      "price": "$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-2.png"
+    },
+    {
+      "id": "pier-pie-palace",
+      "name": "Pier Pie Palace",
+      "coords": [-122.4119, 37.808],
+      "description": "Waterfront dining with bay views.",
+      "city": "Fisherman's Wharf",
+      "rating": 4.2,
+      "price": "$$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-3.png"
+    },
+    {
+      "id": "the-cheese-chapel",
+      "name": "The Cheese Chapel",
+      "coords": [-122.4219, 37.7783],
+      "description": "Over 20 gourmet cheese options.",
+      "city": "Castro",
+      "rating": 4.8,
+      "price": "$$$",
+      "thumbnail": "https://persistent.oaistatic.com/pizzaz/pizzaz-4.png"
+    }
+  ]
+}

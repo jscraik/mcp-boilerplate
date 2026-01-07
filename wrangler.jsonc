@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mcp-boilerplate",
+  "main": "./src/worker/index.ts",
+  "compatibility_date": "2025-10-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["BoilerplateMCP"],
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "BoilerplateMCP",
+        "name": "MCP_OBJECT",
+      },
+    ],
+  },
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist/client",
+  },
+  "kv_namespaces": [
+    {
+      "binding": "OAUTH_KV",
+      "id": "OAUTH_KV_NAMESPACE_ID",
+      "preview_id": "OAUTH_KV_NAMESPACE_ID"
+    }
+  ]
+}

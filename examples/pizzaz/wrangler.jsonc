@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "openai-apps-sdk-template-pizza",
+  "main": "./src/worker/index.ts",
+  "compatibility_date": "2025-10-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["TemplateMCPServer"],
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "TemplateMCPServer",
+        "name": "MCP_OBJECT",
+      },
+    ],
+  },
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist/client",
+  },
+}

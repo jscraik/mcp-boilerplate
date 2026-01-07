@@ -1,0 +1,70 @@
+{
+  "albums": [
+    {
+      "id": "summer-escape",
+      "title": "Summer Slice",
+      "cover": "https://persistent.oaistatic.com/pizzaz/pizzaz-1.png",
+      "photos": [
+        {
+          "id": "s1",
+          "title": "Waves",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-2.png"
+        },
+        {
+          "id": "s2",
+          "title": "Palm trees",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-3.png"
+        },
+        {
+          "id": "s3",
+          "title": "Sunset",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-6.png"
+        }
+      ]
+    },
+    {
+      "id": "city-lights",
+      "title": "Pepperoni Nights",
+      "cover": "https://persistent.oaistatic.com/pizzaz/pizzaz-4.png",
+      "photos": [
+        {
+          "id": "c1",
+          "title": "Downtown",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-5.png"
+        },
+        {
+          "id": "c2",
+          "title": "Neon",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-1.png"
+        },
+        {
+          "id": "c3",
+          "title": "Streets",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-2.png"
+        }
+      ]
+    },
+    {
+      "id": "into-the-woods",
+      "title": "Truffle Forest",
+      "cover": "https://persistent.oaistatic.com/pizzaz/pizzaz-3.png",
+      "photos": [
+        {
+          "id": "w1",
+          "title": "Pines",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-6.png"
+        },
+        {
+          "id": "w2",
+          "title": "Stream",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-4.png"
+        },
+        {
+          "id": "w3",
+          "title": "Trail",
+          "url": "https://persistent.oaistatic.com/pizzaz/pizzaz-5.png"
+        }
+      ]
+    }
+  ]
+}

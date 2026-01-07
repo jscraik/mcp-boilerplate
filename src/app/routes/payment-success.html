@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }</style>
+</head>
+<body class="bg-slate-50 flex flex-col items-center justify-center min-h-screen p-4 antialiased">
+  <div class="w-full max-w-md">
+    <div class="bg-white border border-gray-200 rounded-xl shadow-2xs p-8">
+      <div class="text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-6">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h1>
+        <p class="text-gray-600 mb-6">
+          Thank you for your purchase. You now have access to the premium features.
+        </p>
+
+        <div class="space-y-3">
+          <a href="/" class="block w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700">
+            Return Home
+          </a>
+          <button onclick="window.close()" class="block w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50">
+            Close Window
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center mt-6 text-xs text-gray-500">
+      If you have any questions, please contact support.
+    </p>
+  </div>
+
+  <script type="module">
+    // OpenAI Apps SDK integration
+    import { useOpenAIGlobal } from '../openai/hooks/useOpenAIGlobal.js';
+
+    const { closeWidget } = useOpenAIGlobal();
+
+    // Notify parent that payment is complete
+    window.addEventListener('load', () => {
+      if (window.opener || window.parent !== window) {
+        closeWidget?.();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+/**
+ * Paid tool: subscription_feature
+ * Requires active Stripe subscription
+ */
+
+import { z } from "zod";
+import type { experimental_PaidMcpAgent as PaidMcpAgent } from "@stripe/agent-toolkit/cloudflare";
+import type { Env } from "../../worker/env.js";
+import { PAYMENT_REASONS } from "../../billing/stripe.js";
+
+type AgentProps = {
+  userEmail: string;
+};
+
+export function registerSubscriptionTool(
+  agent: PaidMcpAgent<Env, unknown, AgentProps>,
+  env: Env
+): void {
+  const priceId = env.STRIPE_SUBSCRIPTION_PRICE_ID;
+  const baseUrl = env.BASE_URL;
+
+  if (!priceId || !baseUrl) {
+    console.warn("Subscription tool not configured: missing STRIPE_SUBSCRIPTION_PRICE_ID or BASE_URL");
+    return;
+  }
+
+  agent.paidTool(
+    "subscription_feature",
+    "A premium feature that requires an active subscription. Subscribers get unlimited access to all premium features.",
+    { a: z.number(), b: z.number() },
+    async ({ a, b }: { a: number; b: number }) => ({
+      content: [{ type: "text", text: String(a + b) }],
+    }),
+    {
+      checkout: {
+        success_url: `${baseUrl}/payment/success`,
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        mode: "subscription",
+      },
+      paymentReason: PAYMENT_REASONS.SUBSCRIPTION,
+    }
+  );
+}
