@@ -1,3 +1,5 @@
+<img src="./brand/mKit-brand-logo.png" alt="mKit" height="48" />
+
 # mKit — MCP Server Boilerplate for Cloudflare Workers
 
 This repository is the official boilerplate for bootstrapping MCP servers on Cloudflare Workers with OAuth 2.1, Stripe billing, and OpenAI Apps SDK UI integration.
