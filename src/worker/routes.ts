@@ -9,7 +9,7 @@ import { GitHubHandler } from "../auth/github-handler.js";
 import { GoogleHandler } from "../auth/google-handler.js";
 import StripeWebhookWorker from "../billing/webhooks.js";
 import type { Env } from "./env.js";
-import { BoilerplateMCP } from "./mcp.js";
+import { MKitMCP } from "./mcp.js";
 
 /**
  * Route handler for Cloudflare Workers
@@ -27,7 +27,7 @@ export async function handleRequest(request: Request, env: Env, ctx: ExecutionCo
 
   const oauthProvider = new OAuthProvider({
     apiRoute: "/mcp",
-    apiHandler: BoilerplateMCP.mount("/mcp") as any,
+    apiHandler: MKitMCP.mount("/mcp") as any,
     defaultHandler: GoogleHandler as any,
     authorizeEndpoint: "/authorize",
     tokenEndpoint: "/token",
@@ -62,7 +62,7 @@ export async function handleRequest(request: Request, env: Env, ctx: ExecutionCo
 
   // MCP endpoint (streaming HTTP)
   if (path === "/mcp") {
-    return BoilerplateMCP.mount("/mcp").fetch(request, env, ctx);
+    return MKitMCP.mount("/mcp").fetch(request, env, ctx);
   }
 
   // Payment success page redirect

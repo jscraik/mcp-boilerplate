@@ -3,9 +3,9 @@
  * Handles approval dialogs, cookie signing, and client approval tracking
  */
 
-import type { ClientInfo, AuthRequest } from "@cloudflare/workers-oauth-provider";
+import type { AuthRequest, ClientInfo } from "@cloudflare/workers-oauth-provider";
 
-const COOKIE_NAME = "mcp-boilerplate-clients";
+const COOKIE_NAME = "mkit-clients";
 const ONE_YEAR_IN_SECONDS = 31536000;
 
 // --- Helper Functions ---
@@ -141,9 +141,9 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
   const titleCasedProvider =
     typeof server.provider === "string" && server.provider
       ? server.provider
-          .split("-")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join("-")
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join("-")
       : "Provider";
 
   const logoUrl = server.logo ? sanitizeHtml(server.logo) : "";
@@ -190,53 +190,48 @@ export function renderApprovalDialog(request: Request, options: ApprovalDialogOp
                             <p class="w-1/3 text-sm font-medium text-gray-700 shrink-0">Name</p>
                             <p class="w-2/3 text-sm text-gray-600 break-words">${clientName}</p>
                         </li>
-                        ${
-                          clientUri
-                            ? `
+                        ${clientUri
+      ? `
                         <li class="flex items-start py-3">
                             <p class="w-1/3 text-sm font-medium text-gray-700 shrink-0">Website</p>
                             <a href="${clientUri}" target="_blank" rel="noopener noreferrer" class="w-2/3 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium truncate">${clientUri}</a>
                         </li>`
-                            : ""
-                        }
-                        ${
-                          policyUri
-                            ? `
+      : ""
+    }
+                        ${policyUri
+      ? `
                         <li class="flex items-start py-3">
                             <p class="w-1/3 text-sm font-medium text-gray-700 shrink-0">Privacy Policy</p>
                             <a href="${policyUri}" target="_blank" rel="noopener noreferrer" class="w-2/3 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium">${policyUri}</a>
                         </li>`
-                            : ""
-                        }
-                        ${
-                          tosUri
-                            ? `
+      : ""
+    }
+                        ${tosUri
+      ? `
                         <li class="flex items-start py-3">
                             <p class="w-1/3 text-sm font-medium text-gray-700 shrink-0">Terms of Service</p>
                             <a href="${tosUri}" target="_blank" rel="noopener noreferrer" class="w-2/3 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium">${tosUri}</a>
                         </li>`
-                            : ""
-                        }
-                        ${
-                          redirectUris.length > 0
-                            ? `
+      : ""
+    }
+                        ${redirectUris.length > 0
+      ? `
                         <li class="flex items-start py-3">
                             <p class="w-1/3 text-sm font-medium text-gray-700 shrink-0">Redirect URIs</p>
                             <div class="w-2/3 text-sm text-gray-600 space-y-1 break-words">
                                 ${redirectUris.map((uri) => `<div>${uri}</div>`).join("")}
                             </div>
                         </li>`
-                            : ""
-                        }
-                        ${
-                          contacts
-                            ? `
+      : ""
+    }
+                        ${contacts
+      ? `
                         <li class="flex items-start py-3">
                             <p class="w-1/3 text-sm font-medium text-gray-700 shrink-0">Contact</p>
                             <p class="w-2/3 text-sm text-gray-600 break-words">${contacts}</p>
                         </li>`
-                            : ""
-                        }
+      : ""
+    }
                     </ul>
                 </div>
               </div>

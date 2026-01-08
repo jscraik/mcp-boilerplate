@@ -3,9 +3,9 @@
  * Routes requests to appropriate handlers
  */
 
-import { BoilerplateMCP } from "./mcp.js";
-import { handleRequest } from "./routes.js";
 import type { Env } from "./env.js";
+import { MKitMCP } from "./mcp.js";
+import { handleRequest } from "./routes.js";
 
 export default {
   fetch: (request: Request, env: Env, ctx: ExecutionContext) =>
@@ -13,4 +13,4 @@ export default {
 };
 
 // Export the MCP server class for Wrangler
-export { BoilerplateMCP };
+export { MKitMCP };

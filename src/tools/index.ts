@@ -5,7 +5,7 @@
 
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Env } from "../worker/env.js";
-import type { BoilerplateMCP } from "../worker/mcp.js";
+import type { MKitMCP } from "../worker/mcp.js";
 import type { routesManifest } from "../worker/routesManifest.generated";
 
 // Free tools
@@ -29,7 +29,7 @@ export function registerFreeTools(server: McpServer, env: Env, manifest: typeof 
  * Register all paid tools with the MCP agent
  * These tools require Stripe payment before use
  */
-export function registerPaidTools(agent: BoilerplateMCP, env: Env): void {
+export function registerPaidTools(agent: MKitMCP, env: Env): void {
   // Only register paid tools if Stripe is configured
   if (!env.STRIPE_SECRET_KEY) {
     console.warn("Stripe not configured - paid tools will not be available");

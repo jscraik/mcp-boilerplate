@@ -33,7 +33,7 @@ export type AuthProps = PaymentProps & {
 /**
  * Main MCP server Durable Object with Stripe payment support
  */
-export class BoilerplateMCP extends PaidMcpAgent<Env, PaymentState, AuthProps> {
+export class MKitMCP extends PaidMcpAgent<Env, PaymentState, AuthProps> {
   server = new McpServer({
     name: "mKit",
     version: "1.0.0",

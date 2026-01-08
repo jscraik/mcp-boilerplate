@@ -3,7 +3,7 @@
  */
 export interface Env {
   // Durable Object for MCP server
-  MCP_OBJECT: DurableObjectNamespace<BoilerplateMCP>;
+  MCP_OBJECT: DurableObjectNamespace<MKitMCP>;
 
   // Assets binding for serving static files
   ASSETS: Fetcher;
@@ -40,4 +40,4 @@ export interface Env {
 }
 
 // Forward declaration for Durable Object class
-export type BoilerplateMCP = import("./mcp.js").BoilerplateMCP;
+export type MKitMCP = import("./mcp.js").MKitMCP;

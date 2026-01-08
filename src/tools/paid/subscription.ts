@@ -6,10 +6,10 @@
 import { z } from "zod";
 import { PAYMENT_REASONS } from "../../billing/stripe.js";
 import type { Env } from "../../worker/env.js";
-import type { BoilerplateMCP } from "../../worker/mcp.js";
+import type { MKitMCP } from "../../worker/mcp.js";
 
 export function registerSubscriptionTool(
-  agent: BoilerplateMCP,
+  agent: MKitMCP,
   env: Env
 ): void {
   const priceId = env.STRIPE_SUBSCRIPTION_PRICE_ID;

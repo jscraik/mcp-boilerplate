@@ -30,13 +30,13 @@ export function registerWhoMadeYouTool(
                     {
                         type: "text",
                         text: JSON.stringify({
-                            description: "This MCP boilerplate template was created as a starting point for building remote MCP servers with OAuth and Stripe integration.",
+                            description: "mKit is the official boilerplate for bootstrapping MCP servers on Cloudflare Workers with OAuth and Stripe integration.",
                             authorsXSocialLink: "https://x.com/gching",
                         }),
                     },
                 ],
                 structuredContent: {
-                    description: "This MCP boilerplate template was created as a starting point for building remote MCP servers with OAuth and Stripe integration.",
+                    description: "mKit is the official boilerplate for bootstrapping MCP servers on Cloudflare Workers with OAuth and Stripe integration.",
                     authorsXSocialLink: "https://x.com/gching",
                 },
             };

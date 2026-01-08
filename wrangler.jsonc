@@ -13,14 +13,14 @@
     {
       "tag": "v1",
       "new_sqlite_classes": [
-        "BoilerplateMCP"
+        "MKitMCP"
       ],
     },
   ],
   "durable_objects": {
     "bindings": [
       {
-        "class_name": "BoilerplateMCP",
+        "class_name": "MKitMCP",
         "name": "MCP_OBJECT",
       },
     ],
