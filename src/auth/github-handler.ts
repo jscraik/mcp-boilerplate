@@ -46,11 +46,12 @@ app.post("/authorize", async (c) => {
     c.req.raw,
     c.env.COOKIE_ENCRYPTION_KEY || "default-secret"
   );
-  if (!state.oauthReqInfo) {
+  if (!state || typeof state !== "object" || !("oauthReqInfo" in state)) {
     return c.text("Invalid request", 400);
   }
 
-  return redirectToGithub(c.req.raw, state.oauthReqInfo, c.env.GITHUB_CLIENT_ID, headers);
+  const oauthReqInfo = (state as { oauthReqInfo: AuthRequest }).oauthReqInfo;
+  return redirectToGithub(c.req.raw, oauthReqInfo, c.env.GITHUB_CLIENT_ID, headers);
 });
 
 async function redirectToGithub(

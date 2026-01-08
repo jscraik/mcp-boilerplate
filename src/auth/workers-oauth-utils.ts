@@ -10,16 +10,6 @@ const ONE_YEAR_IN_SECONDS = 31536000;
 
 // --- Helper Functions ---
 
-function encodeState(data: unknown): string {
-  try {
-    const jsonString = JSON.stringify(data);
-    return btoa(jsonString);
-  } catch (e) {
-    console.error("Error encoding state:", e);
-    throw new Error("Could not encode state");
-  }
-}
-
 function decodeState<T = unknown>(encoded: string): T {
   try {
     const jsonString = atob(encoded);
@@ -312,8 +302,9 @@ export async function parseRedirectApproval(
       throw new Error("Missing or invalid 'state' in form data.");
     }
 
-    state = decodeState<{ oauthReqInfo?: AuthRequest }>(encodedState);
-    clientId = state?.oauthReqInfo?.clientId;
+    state = decodeState(encodedState);
+    const decodedState = state as { oauthReqInfo?: AuthRequest };
+    clientId = decodedState?.oauthReqInfo?.clientId;
 
     if (!clientId) {
       throw new Error("Could not extract clientId from state object.");

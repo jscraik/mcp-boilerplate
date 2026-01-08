@@ -83,7 +83,7 @@ export async function handleStripeWebhook(request: Request, env: Env): Promise<R
   } catch (error: unknown) {
     console.error("Webhook error:", error);
 
-    if (error instanceof Error && error.type === "StripeSignatureVerificationError") {
+    if (error instanceof Error && (error as any).type === "StripeSignatureVerificationError") {
       return new Response(
         "Webhook signature verification failed. Check that your STRIPE_WEBHOOK_SECRET matches the signing secret in your Stripe dashboard.",
         { status: 400 }

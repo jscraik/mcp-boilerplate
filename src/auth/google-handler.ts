@@ -45,11 +45,12 @@ app.post("/authorize", async (c) => {
     c.req.raw,
     c.env.COOKIE_ENCRYPTION_KEY || "default-secret"
   );
-  if (!state.oauthReqInfo) {
+  if (!state || typeof state !== "object" || !("oauthReqInfo" in state)) {
     return c.text("Invalid request", 400);
   }
 
-  return redirectToGoogle(c, state.oauthReqInfo, headers);
+  const oauthReqInfo = (state as { oauthReqInfo: AuthRequest }).oauthReqInfo;
+  return redirectToGoogle(c, oauthReqInfo, headers);
 });
 
 async function redirectToGoogle(

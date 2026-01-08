@@ -3,17 +3,13 @@
  * Handles /mcp, OAuth endpoints, and webhooks
  */
 
-import { Hono } from "hono";
 import { OAuthProvider } from "@cloudflare/workers-oauth-provider";
 import type { Env } from "./env.js";
 import { BoilerplateMCP } from "./mcp.js";
 import { GoogleHandler } from "../auth/google-handler.js";
 import { GitHubHandler } from "../auth/github-handler.js";
 import { serveProtectedResourceMetadata } from "../auth/apps-sdk-oauth.js";
-import { handleStripeWebhook } from "../billing/webhooks.js";
 import StripeWebhookWorker from "../billing/webhooks.js";
-
-const app = new Hono<{ Bindings: Env }>();
 
 /**
  * Route handler for Cloudflare Workers
@@ -65,7 +61,7 @@ export async function handleRequest(request: Request, env: Env, ctx: ExecutionCo
 
   // MCP endpoint (streaming HTTP)
   if (path === "/mcp") {
-    return BoilerplateMCP.mount("/mcp")(request, env, ctx);
+    return BoilerplateMCP.mount("/mcp").fetch(request, env, ctx);
   }
 
   // Payment success page redirect
