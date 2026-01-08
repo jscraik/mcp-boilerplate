@@ -1,4 +1,6 @@
-<img src="./brand/mKit-brand-logo.png" alt="mKit" height="48" />
+<p align="center">
+  <img src="./brand/mKit-brand-logo.png" alt="mKit" height="120" />
+</p>
 
 # mKit — MCP Server Boilerplate for Cloudflare Workers
 
