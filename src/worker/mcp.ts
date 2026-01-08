@@ -1,12 +1,16 @@
 /**
- * MCP Server
+ * MCP Server with Stripe payment integration
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { McpAgent } from "agents/mcp";
+import {
+  experimental_PaidMcpAgent as PaidMcpAgent,
+  type PaymentProps,
+  type PaymentState,
+} from "@stripe/agent-toolkit/cloudflare";
+import { registerFreeTools, registerPaidTools } from "../tools/index.js";
 import type { Env } from "./env.js";
 import { routesManifest } from "./routesManifest.generated.js";
-import { registerFreeTools } from "../tools/index.js";
 
 const DEFAULT_RESOURCE_META = {
   "openai/widgetCSP": {
@@ -17,9 +21,19 @@ const DEFAULT_RESOURCE_META = {
 };
 
 /**
- * Main MCP server Durable Object
+ * Auth props from OAuth flow
  */
-export class BoilerplateMCP extends McpAgent<Env> {
+export type AuthProps = PaymentProps & {
+  login: string;
+  name: string;
+  email: string;
+  accessToken: string;
+};
+
+/**
+ * Main MCP server Durable Object with Stripe payment support
+ */
+export class BoilerplateMCP extends PaidMcpAgent<Env, PaymentState, AuthProps> {
   server = new McpServer({
     name: "BoilerplateMCP",
     version: "1.0.0",
@@ -68,7 +82,10 @@ export class BoilerplateMCP extends McpAgent<Env> {
       );
     }
 
-    // Register free tools
+    // Register free tools (no payment required)
     registerFreeTools(this.server, this.env, routesManifest);
+
+    // Register paid tools (Stripe integration)
+    registerPaidTools(this, this.env);
   }
 }

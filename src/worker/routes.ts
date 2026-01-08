@@ -4,12 +4,12 @@
  */
 
 import { OAuthProvider } from "@cloudflare/workers-oauth-provider";
+import { serveProtectedResourceMetadata } from "../auth/apps-sdk-oauth.js";
+import { GitHubHandler } from "../auth/github-handler.js";
+import { GoogleHandler } from "../auth/google-handler.js";
+import StripeWebhookWorker from "../billing/webhooks.js";
 import type { Env } from "./env.js";
 import { BoilerplateMCP } from "./mcp.js";
-import { GoogleHandler } from "../auth/google-handler.js";
-import { GitHubHandler } from "../auth/github-handler.js";
-import { serveProtectedResourceMetadata } from "../auth/apps-sdk-oauth.js";
-import StripeWebhookWorker from "../billing/webhooks.js";
 
 /**
  * Route handler for Cloudflare Workers
@@ -24,6 +24,7 @@ export async function handleRequest(request: Request, env: Env, ctx: ExecutionCo
   }
 
   // OAuth provider setup (Google/GitHub login)
+
   const oauthProvider = new OAuthProvider({
     apiRoute: "/mcp",
     apiHandler: BoilerplateMCP.mount("/mcp") as any,

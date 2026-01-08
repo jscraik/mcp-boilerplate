@@ -3,14 +3,18 @@
   "name": "mcp-boilerplate",
   "main": "./src/worker/index.ts",
   "compatibility_date": "2025-10-08",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "observability": {
     "enabled": true,
   },
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["BoilerplateMCP"],
+      "new_sqlite_classes": [
+        "BoilerplateMCP"
+      ],
     },
   ],
   "durable_objects": {
@@ -28,8 +32,12 @@
   "kv_namespaces": [
     {
       "binding": "OAUTH_KV",
-      "id": "OAUTH_KV_NAMESPACE_ID",
-      "preview_id": "OAUTH_KV_NAMESPACE_ID"
+      // Run: pnpm wrangler kv namespace create OAUTH_KV
+      // Then replace with your actual namespace ID
+      "id": "<YOUR_KV_NAMESPACE_ID>",
+      // Run: pnpm wrangler kv namespace create OAUTH_KV --preview
+      // Then replace with your actual preview namespace ID
+      "preview_id": "<YOUR_PREVIEW_KV_NAMESPACE_ID>"
     }
   ]
 }

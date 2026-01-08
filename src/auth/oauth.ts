@@ -99,11 +99,12 @@ export async function fetchUpstreamAuthToken({
 /**
  * Context from the auth process, encrypted & stored in the auth token
  * and provided to the MCP server as props.
+ * Must include userEmail for Stripe payment integration.
  */
 export type AuthProps = {
   login: string;
   name: string;
   email: string;
-  userEmail: string;
+  userEmail: string; // Required by PaymentProps for Stripe
   accessToken: string;
 };

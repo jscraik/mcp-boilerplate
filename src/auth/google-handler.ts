@@ -5,7 +5,7 @@
 import type { AuthRequest, OAuthHelpers } from "@cloudflare/workers-oauth-provider";
 import { Hono } from "hono";
 import type { Env } from "../worker/env.js";
-import { fetchUpstreamAuthToken, getUpstreamAuthorizeUrl, AuthProps } from "./oauth.js";
+import { AuthProps, fetchUpstreamAuthToken, getUpstreamAuthorizeUrl } from "./oauth.js";
 import { clientIdAlreadyApproved, parseRedirectApproval, renderApprovalDialog } from "./workers-oauth-utils.js";
 
 const app = new Hono<{ Bindings: Env & { OAUTH_PROVIDER: OAuthHelpers } }>();
@@ -17,11 +17,17 @@ app.get("/authorize", async (c) => {
     return c.text("Invalid request", 400);
   }
 
+  const cookieSecret = c.env.COOKIE_ENCRYPTION_KEY;
+  if (!cookieSecret) {
+    console.error("COOKIE_ENCRYPTION_KEY is not configured");
+    return c.text("Server configuration error", 500);
+  }
+
   if (
     await clientIdAlreadyApproved(
       c.req.raw,
       oauthReqInfo.clientId,
-      c.env.COOKIE_ENCRYPTION_KEY || "default-secret"
+      cookieSecret
     )
   ) {
     return redirectToGoogle(c, oauthReqInfo);
@@ -41,9 +47,15 @@ app.get("/authorize", async (c) => {
 });
 
 app.post("/authorize", async (c) => {
+  const cookieSecret = c.env.COOKIE_ENCRYPTION_KEY;
+  if (!cookieSecret) {
+    console.error("COOKIE_ENCRYPTION_KEY is not configured");
+    return c.text("Server configuration error", 500);
+  }
+
   const { state, headers } = await parseRedirectApproval(
     c.req.raw,
-    c.env.COOKIE_ENCRYPTION_KEY || "default-secret"
+    cookieSecret
   );
   if (!state || typeof state !== "object" || !("oauthReqInfo" in state)) {
     return c.text("Invalid request", 400);
@@ -119,6 +131,7 @@ app.get("/callback/google", async (c) => {
     },
     scope: oauthReqInfo.scope,
     props: {
+      login: id,
       name,
       email,
       accessToken,

@@ -4,16 +4,12 @@
  */
 
 import { z } from "zod";
-import type { experimental_PaidMcpAgent as PaidMcpAgent } from "@stripe/agent-toolkit/cloudflare";
-import type { Env } from "../../worker/env.js";
 import { PAYMENT_REASONS } from "../../billing/stripe.js";
-
-type AgentProps = {
-  userEmail: string;
-};
+import type { Env } from "../../worker/env.js";
+import type { BoilerplateMCP } from "../../worker/mcp.js";
 
 export function registerSubscriptionTool(
-  agent: PaidMcpAgent<Env, unknown, AgentProps>,
+  agent: BoilerplateMCP,
   env: Env
 ): void {
   const priceId = env.STRIPE_SUBSCRIPTION_PRICE_ID;

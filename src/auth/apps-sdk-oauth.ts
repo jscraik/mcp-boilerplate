@@ -66,8 +66,62 @@ export interface TokenPayload {
 }
 
 /**
+ * Extended JWK type with optional kid and alg fields
+ */
+interface JwkWithMetadata extends JsonWebKey {
+  kid?: string;
+  alg?: string;
+}
+
+// JWKS cache for token verification
+let jwksCache: { keys: JwkWithMetadata[]; fetchedAt: number } | null = null;
+const JWKS_CACHE_TTL_MS = 3600000; // 1 hour
+
+/**
+ * Fetch and cache JWKS from the authorization server
+ */
+async function getJwks(jwksUri: string): Promise<JwkWithMetadata[]> {
+  const now = Date.now();
+  if (jwksCache && now - jwksCache.fetchedAt < JWKS_CACHE_TTL_MS) {
+    return jwksCache.keys;
+  }
+
+  const response = await fetch(jwksUri);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch JWKS: ${response.status}`);
+  }
+
+  const jwks = (await response.json()) as { keys: JwkWithMetadata[] };
+  jwksCache = { keys: jwks.keys, fetchedAt: now };
+  return jwks.keys;
+}
+
+/**
+ * Import a JWK for verification
+ */
+async function importJwk(jwk: JsonWebKey): Promise<CryptoKey> {
+  return crypto.subtle.importKey(
+    "jwk",
+    jwk,
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["verify"]
+  );
+}
+
+/**
+ * Base64URL decode (JWT uses base64url, not standard base64)
+ */
+function base64UrlDecode(str: string): string {
+  // Replace URL-safe characters and add padding
+  const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+  const padding = "=".repeat((4 - (base64.length % 4)) % 4);
+  return atob(base64 + padding);
+}
+
+/**
  * Verify a Bearer token from the Authorization header
- * This is a simplified version - production should use JWKS verification
+ * Uses JWKS for cryptographic signature verification
  */
 export async function verifyBearerToken(
   authorizationHeader: string | null,
@@ -85,28 +139,81 @@ export async function verifyBearerToken(
 
   const token = match[1];
 
-  // In production, verify JWT signature using JWKS from OAUTH_JWKS_URI
-  // For now, this is a placeholder that accepts tokens for development
   try {
-    // Simple base64 decode for testing (NOT SECURE for production)
     const parts = token.split(".");
     if (parts.length !== 3) {
+      console.warn("Invalid JWT format: expected 3 parts");
       return null;
     }
 
-    const payload = JSON.parse(atob(parts[1])) as TokenPayload;
+    const [headerB64, payloadB64, signatureB64] = parts;
+
+    // Decode header to get key ID
+    const header = JSON.parse(base64UrlDecode(headerB64)) as { kid?: string; alg: string };
+
+    // Decode payload
+    const payload = JSON.parse(base64UrlDecode(payloadB64)) as TokenPayload;
 
     // Verify issuer
     const expectedIssuer = env.OAUTH_ISSUER || env.BASE_URL;
     if (payload.iss !== expectedIssuer) {
-      console.warn("Token issuer mismatch:", payload.iss, expectedIssuer);
+      console.warn("Token issuer mismatch:", payload.iss, "expected:", expectedIssuer);
       return null;
     }
 
     // Verify expiration
-    if (payload.exp && payload.exp < Date.now() / 1000) {
+    const now = Date.now() / 1000;
+    if (payload.exp && payload.exp < now) {
       console.warn("Token expired");
       return null;
+    }
+
+    // Verify not-before
+    if (payload.nbf && payload.nbf > now) {
+      console.warn("Token not yet valid");
+      return null;
+    }
+
+    // Verify signature using JWKS
+    if (env.OAUTH_JWKS_URI) {
+      const jwks = await getJwks(env.OAUTH_JWKS_URI);
+
+      // Find the key by kid, or use the first RS256 key
+      const jwk = header.kid
+        ? jwks.find((k) => k.kid === header.kid)
+        : jwks.find((k) => k.alg === "RS256" || k.kty === "RSA");
+
+      if (!jwk) {
+        console.warn("No matching JWK found for token verification");
+        return null;
+      }
+
+      const key = await importJwk(jwk);
+
+      // Verify signature
+      const signatureBytes = Uint8Array.from(
+        base64UrlDecode(signatureB64),
+        (c) => c.charCodeAt(0)
+      );
+      const dataToVerify = new TextEncoder().encode(`${headerB64}.${payloadB64}`);
+
+      const isValid = await crypto.subtle.verify(
+        "RSASSA-PKCS1-v1_5",
+        key,
+        signatureBytes,
+        dataToVerify
+      );
+
+      if (!isValid) {
+        console.warn("Token signature verification failed");
+        return null;
+      }
+    } else {
+      // No JWKS URI configured - log warning but allow in development
+      console.warn(
+        "OAUTH_JWKS_URI not configured - token signature not verified. " +
+        "This is insecure and should only be used in development."
+      );
     }
 
     return payload;
