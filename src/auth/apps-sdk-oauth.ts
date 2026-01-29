@@ -36,6 +36,10 @@ export function generateProtectedResourceMetadata(env: Env): ProtectedResourceMe
   };
 }
 
+export function getProtectedResourceMetadataUrl(env: Env): string {
+  return new URL("/.well-known/oauth-protected-resource", env.BASE_URL).toString();
+}
+
 /**
  * Serve the protected resource metadata endpoint
  * GET /.well-known/oauth-protected-resource
@@ -228,10 +232,9 @@ export async function verifyBearerToken(
  * Prompts the client to authenticate using OAuth
  */
 export function createAuthenticateHeader(env: Env, scopes?: string[]): string {
-  const metadata = generateProtectedResourceMetadata(env);
   const scopeParam = scopes ? `, scope="${scopes.join(" ")}"` : "";
 
-  return `Bearer resource_metadata="${metadata.resource}"${scopeParam}`;
+  return `Bearer resource_metadata="${getProtectedResourceMetadataUrl(env)}"${scopeParam}`;
 }
 
 /**

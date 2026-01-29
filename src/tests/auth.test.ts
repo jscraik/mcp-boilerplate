@@ -7,6 +7,7 @@ import {
   createAuthenticateHeader,
   createUnauthorizedResponse,
   generateProtectedResourceMetadata,
+  getProtectedResourceMetadataUrl,
   verifyBearerToken,
 } from "../auth/apps-sdk-oauth.js";
 import type { Env } from "../worker/env.js";
@@ -65,7 +66,7 @@ describe("OAuth", () => {
     it("should create valid authenticate header without scopes", () => {
       const env = { BASE_URL: "https://test.workers.dev" } as MockEnv as Env;
       const header = createAuthenticateHeader(env);
-      expect(header).toContain('resource_metadata="https://test.workers.dev"');
+      expect(header).toContain('resource_metadata="https://test.workers.dev/.well-known/oauth-protected-resource"');
     });
 
     it("should create valid authenticate header with scopes", () => {
@@ -79,6 +80,13 @@ describe("OAuth", () => {
       const response = createUnauthorizedResponse(env);
       expect(response.status).toBe(401);
       expect(response.headers.get("WWW-Authenticate")).toBeTruthy();
+    });
+
+    it("should expose resource metadata URL", () => {
+      const env = { BASE_URL: "https://test.workers.dev" } as MockEnv as Env;
+      expect(getProtectedResourceMetadataUrl(env)).toBe(
+        "https://test.workers.dev/.well-known/oauth-protected-resource"
+      );
     });
   });
 });
